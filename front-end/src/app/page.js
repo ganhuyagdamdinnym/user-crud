@@ -23,11 +23,6 @@ export default function App() {
 
   const [color, setColor] = useState("black")
 
-
-
-
-
-
   async function keydata() {
     const url = "http://localhost:8000/password"
     const fetchData = await fetch(url,).then((fetchData) => fetchData.json());
