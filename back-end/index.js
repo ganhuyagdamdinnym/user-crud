@@ -11,93 +11,20 @@ const port = 8000;
 const app = express();
 app.use(cors())
 app.use(express.json())
-//password
-app.post('/password', (req, res) => {
-    const pass = req.body
-    // console.log(users.work)
-    fs.readFile("./password.json",
-        (readError, data) => {
-            if (readError) {
-                res.json({
-                    status: "read file error"
-                })
-            };
-            let saveddata = JSON.parse(data);
 
-            const key = {
-                id: Date.now().toString(),
-                password: pass.password
-            };
-            saveddata.push(key)
-            fs.writeFile("./password.json",
-                JSON.stringify(saveddata),
-                (writeError) => {
-                    if (writeError) {
-                        res.json({
-                            status: "error hhhh"
-                        })
-                    } else {
-                        res.json(
-                            saveddata
-                        )
-                    }
-                })
-        }
-    )
-})
-//getpass
-app.get('/password', (req, res) => {
-    fs.readFile("./password.json", "utf-8",
-        (readError, data) => {
-            let saveddata = JSON.parse(data);
-            res.json({
-                data: saveddata
-            })
-        }
-    )
-})
-///put passs
-app.put("/password", (req, res) => {
-    const body = req.body;
-    fs.readFile("./password.json", "utf-8",
-        (readError, data) => {
-            let savedData = JSON.parse(data);
-            if (readError) {
-                res.json({
-                    status: "read file error",
-                });
-            }
-            const updatedData = savedData.map((d) => {
-                if (d.id === body.id) {
-                    (d.password = body.password)
 
-                }
-                return d;
-            });
-            fs.writeFile("./password.json",
-                JSON.stringify(updatedData),
-                (writeError) => {
-                    res.json({
-                        data: updatedData
-                    });
+const userRouter = require("./user")
+app.use(userRouter)
 
-                }
-
-            )
-
-        }
-
-    )
-
-});
-
+const userchaat = require("./chaat")
+app.use(userchaat)
 
 //backend
 app.get('/users', (req, res) => {
     fs.readFile("./user.json", "utf-8",
         (readError, data) => {
             let saveddata = JSON.parse(data);
-            saveddata = saveddata.map((cur) => ({ id: cur.id, username: cur.username, age: cur.age, work: cur.work }))
+            saveddata = saveddata.map((cur) => ({ id: cur.id, username: cur.username, age: cur.age, work: cur.work, gender: cur.gender, mobile_phone: cur.mobile_phone }))
             res.json({
                 data: saveddata
             })
@@ -130,42 +57,7 @@ app.get('/users/:password/:name', (req, res) => {
 
 
 ///post
-app.post('/users', (req, res) => {
-    const body = req.body
-    // console.log(users.work)
-    fs.readFile("./user.json",
-        (readError, data) => {
-            if (readError) {
-                res.json({
-                    status: "read file error"
-                })
-            };
-            let saveddata = JSON.parse(data);
 
-            const user = {
-                id: Date.now().toString(),
-                username: body.name,
-                age: body.age,
-                work: body.work,
-                password: body.password
-            };
-            saveddata.push(user)
-            fs.writeFile("./user.json",
-                JSON.stringify(saveddata),
-                (writeError) => {
-                    if (writeError) {
-                        res.json({
-                            status: "error hhhh"
-                        })
-                    } else {
-                        res.json(
-                            saveddata
-                        )
-                    }
-                })
-        }
-    )
-})
 
 // back-end ymar id irsiin
 // back-end ene id eer ustgaj chadsimu
@@ -211,7 +103,11 @@ app.put("/users", (req, res) => {
                 if (d.id === body.id) {
                     (d.username = body.name),
                         (d.age = body.age),
-                        (d.work = body.work);
+                        (d.work = body.work),
+                        (d.gender = body.gender),
+                        (d.home_address = body.home_address),
+                        (d.mobile_phone = body.mobile_phone)
+
                 }
                 return d;
             });
@@ -230,7 +126,13 @@ app.put("/users", (req, res) => {
 
     )
 
+
 });
+
+//put impormation
+
+
+
 app.listen(port, () => {
     console.log("power on" + port)
 })

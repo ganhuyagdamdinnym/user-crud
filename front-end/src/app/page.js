@@ -48,7 +48,10 @@ export default function App() {
       name: uservalue,
       age: agevalue,
       work: workvalue,
-      password: passvalue
+      password: passvalue,
+      mobile_phone: "",
+      gender: "",
+      home_address: ""
     })
       .then((response) => {
         console.log(response.data);
